@@ -14,10 +14,12 @@ def pentagonalise(number):
     return(pentagonal)
 
 def reversePentagonalise(number):
-    dePental = number*2
-    # x = 3n^2-n-dePental
-    original = (math.sqrt(1+12*dePental))/6
-    print(1+original)
+    # 0 = 3n^2-n-dePental
+    original = (1+(math.sqrt(1+(24*number))))/6
+    print(original)
+    if(original%1>0):
+        return False
+    return True
 
 count = 0
 limit = 100
