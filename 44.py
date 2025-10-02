@@ -3,31 +3,55 @@
 
 #It can be seen that P4+P7=22+70=92=P8. However, their difference, 70-22=48, is not pentagonal.
 
-#Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D=|Pk-Pj| is minimised; what is the value of ?
+#Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D=|Pk-Pj| is minimised; what is the value of D?
 
 import math
 
 
 def pentagonalise(number):
     pentagonal = number*((3*number)-1)/2
-    print(pentagonal)
+    #print(pentagonal)
     return(pentagonal)
 
 def reversePentagonalise(number):
     # 0 = 3n^2-n-dePental
     original = (1+(math.sqrt(1+(24*number))))/6
-    print(original)
+    #print(original)
     if(original%1>0):
         return False
-    return True
+    return original
 
-count = 0
-limit = 100
+number1 = 1
+number1pen = 0
+number2 = 1
+number2pen = 0
+pentagonalDict = []
+breakCondition = False
+
 while True:
-    if(count > limit):
+    if(number2 >= number1):
+        pentagonalDict.append([number1, number1pen])
+        number2 = 1
+        number1 += 1
+        number1pen = pentagonalise(number1)
+    
+    for item in pentagonalDict:
+        if(number2 == item[0]):
+            number2pen = item[1]
+
+    differencePetagonal = number1pen-number2pen
+
+    #determin epnalt
+    for item in pentagonalDict:
+        if(differencePetagonal == item[1]):
+            print(number1)
+            print(number1pen)
+            print(number2)
+            print(number2pen)
+            print(differencePetagonal)
+            breakCondition = True
+
+    if(breakCondition):
         break
 
-    print(count)
-    reversePentagonalise(pentagonalise(count))
-
-    count += 1
+    number2 += 1
