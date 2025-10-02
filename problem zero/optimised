@@ -5,9 +5,7 @@
 
 #Among the first 852 thousand square numbers, what is the sum of all the odd squares?
 
-#103078367999858000
-
-count = 0
+count = 1
 limit = 852000 #Thousand, is 3 zeros
 squaredTotals = 0
 squared = 0
@@ -17,11 +15,11 @@ while True:
     if count > limit:
         break
 
-    if(squared%2==1):
-        print(count)
-        print(squared)
-        squaredTotals+=squared
+    
+    print(count)
+    print(squared)
+    squaredTotals+=squared
 
-    count += 1
+    count += 2
 
 print(squaredTotals)
