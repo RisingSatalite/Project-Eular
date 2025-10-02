@@ -29,34 +29,37 @@ number2pen = 0
 pentagonalDict = []
 breakCondition = False
 
-while True:
-    print(number1)
-    if(number2 >= number1):
-        pentagonalDict.append([number1, number1pen])
-        number2 = 1
-        number1 += 1
-        number1pen = pentagonalise(number1)
-    
-    for item in pentagonalDict:
-        if(number2 == item[0]):
-            number2pen = item[1]
+with open("pentagonNumbers.txt", "a") as f:
 
-    differencePetagonal = number1pen-number2pen
-    sumPetagonal = number1pen+number2pen
+    while True:
+        print(number1)
+        if(number2 >= number1):
+            pentagonalDict.append([number1, number1pen])
+            f.write(f"{number1},{number1pen}\n")
+            number2 = 1
+            number1 += 1
+            number1pen = pentagonalise(number1)
+        
+        for item in pentagonalDict:
+            if(number2 == item[0]):
+                number2pen = item[1]
 
-    #determin epnalt
-    for item in pentagonalDict:
-        if(differencePetagonal == item[1]):
-            if(reversePentagonalise(sumPetagonal)):
-                print(number1)
-                print(number1pen)
-                print(number2)
-                print(number2pen)
-                print(differencePetagonal)
-                print(sumPetagonal)
-                breakCondition = True
+        differencePetagonal = number1pen-number2pen
+        sumPetagonal = number1pen+number2pen
 
-    if(breakCondition):
-        break
+        #determin epnalt
+        for item in pentagonalDict:
+            if(differencePetagonal == item[1]):
+                if(reversePentagonalise(sumPetagonal)):
+                    print(number1)
+                    print(number1pen)
+                    print(number2)
+                    print(number2pen)
+                    print(differencePetagonal)
+                    print(sumPetagonal)
+                    breakCondition = True
 
-    number2 += 1
+        if(breakCondition):
+            break
+
+        number2 += 1
