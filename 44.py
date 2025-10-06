@@ -4,44 +4,44 @@
 #It can be seen that P4+P7=22+70=92=P8. However, their difference, 70-22=48, is not pentagonal.
 
 #Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D=|Pk-Pj| is minimised; what is the value of D?
+
 import math
 
-# ------------------------------------------------------------------
-#  Utility functions
-# ------------------------------------------------------------------
 def pentagonal(n: int) -> int:
     """Return the nth pentagonal number."""
     return n * (3 * n - 1) // 2
 
 def is_pentagonal(x: int) -> bool:
-    """Return True if x is a pentagonal number."""
-    # n = (1 + sqrt(1 + 24x)) / 6
-    sqrt_val = math.isqrt(1 + 24 * x)
-    return (1 + sqrt_val) % 6 == 0
+    """
+    Return True iff x is a pentagonal number.
+    Derived from: n = (1 + sqrt(1 + 24x)) / 6
+    We avoid floating point by using integer square‑root.
+    """
+    s = 1 + 24 * x
+    r = math.isqrt(s)               # integer sqrt
+    return r * r == s and (1 + r) % 6 == 0
 
-# ------------------------------------------------------------------
-#  Main search
-# ------------------------------------------------------------------
-MAX_N = 20000          # enough to find the minimal difference
-pent_set = set()       # store all generated pentagonal numbers
-best_diff = None
-best_pair = None
+# ---------- Search -------------------------------------------------
+MAX_N = 20000          # enough to reach the known solution
+best_diff  = None
+best_pair  = None
 
-for j in range(1, MAX_N):
+# Pre‑build a set of pentagonal numbers for quick membership tests
+pent_set = {pentagonal(n) for n in range(1, MAX_N + 1)}
+
+for j in range(2, MAX_N):
     pj = pentagonal(j)
-    pent_set.add(pj)
-
     for i in range(1, j):
         pi = pentagonal(i)
-        diff = pj - pi           # positive because j > i
-        s = pj + pi
+        diff = pj - pi                # always positive because j > i
+        ssum = pj + pi
 
-        if diff in pent_set and s in pent_set:
+        # Both difference and sum must be pentagonal
+        if diff in pent_set and ssum in pent_set:
             if best_diff is None or diff < best_diff:
                 best_diff = diff
                 best_pair = (pi, pj)
-                # We could break here if we only want the *first* minimal diff,
-                # but we keep scanning to be sure there is no even smaller one.
 
-print(f"Minimal difference: {best_diff}")
-print(f"Pentagonal numbers: P={best_pair[0]}, Q={best_pair[1]}")
+# ---------- Result -----------------------------------------------
+print("Minimal difference :", best_diff)
+print("Pentagonal pair    :", best_pair)
