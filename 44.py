@@ -4,62 +4,44 @@
 #It can be seen that P4+P7=22+70=92=P8. However, their difference, 70-22=48, is not pentagonal.
 
 #Find the pair of pentagonal numbers, Pj and Pk, for which their sum and difference are pentagonal and D=|Pk-Pj| is minimised; what is the value of D?
-
 import math
 
-# Info, pentagonal numbers are seprated by 3n+1
+# ------------------------------------------------------------------
+#  Utility functions
+# ------------------------------------------------------------------
+def pentagonal(n: int) -> int:
+    """Return the nth pentagonal number."""
+    return n * (3 * n - 1) // 2
 
-def pentagonalise(number):
-    pentagonal = number*((3*number)-1)/2
-    #print(pentagonal)
-    return(pentagonal)
+def is_pentagonal(x: int) -> bool:
+    """Return True if x is a pentagonal number."""
+    # n = (1 + sqrt(1 + 24x)) / 6
+    sqrt_val = math.isqrt(1 + 24 * x)
+    return (1 + sqrt_val) % 6 == 0
 
-def reversePentagonalise(number):
-    # 0 = 3n^2-n-dePental
-    original = (1+(math.sqrt(1+(24*number))))/6
-    #print(original)
-    if(original%1>0):
-        return False
-    return original
+# ------------------------------------------------------------------
+#  Main search
+# ------------------------------------------------------------------
+MAX_N = 20000          # enough to find the minimal difference
+pent_set = set()       # store all generated pentagonal numbers
+best_diff = None
+best_pair = None
 
-number1 = 1
-number1pen = 0
-number2 = 1
-number2pen = 0
-pentagonalDict = []
-breakCondition = False
+for j in range(1, MAX_N):
+    pj = pentagonal(j)
+    pent_set.add(pj)
 
-with open("pentagonNumbers.txt", "a") as f:
+    for i in range(1, j):
+        pi = pentagonal(i)
+        diff = pj - pi           # positive because j > i
+        s = pj + pi
 
-    while True:
-        print(number1)
-        if(number2 >= number1):
-            pentagonalDict.append([number1, number1pen])
-            f.write(f"{number1},{number1pen}\n")
-            number2 = 1
-            number1 += 1
-            number1pen = pentagonalise(number1)
-        
-        for item in pentagonalDict:
-            if(number2 == item[0]):
-                number2pen = item[1]
+        if diff in pent_set and s in pent_set:
+            if best_diff is None or diff < best_diff:
+                best_diff = diff
+                best_pair = (pi, pj)
+                # We could break here if we only want the *first* minimal diff,
+                # but we keep scanning to be sure there is no even smaller one.
 
-        differencePetagonal = number1pen-number2pen
-        sumPetagonal = number1pen+number2pen
-
-        #determin epnalt
-        for item in pentagonalDict:
-            if(differencePetagonal == item[1]):
-                if(reversePentagonalise(sumPetagonal)):
-                    print(number1)
-                    print(number1pen)
-                    print(number2)
-                    print(number2pen)
-                    print(differencePetagonal)
-                    print(sumPetagonal)
-                    breakCondition = True
-
-        if(breakCondition):
-            break
-
-        number2 += 1
+print(f"Minimal difference: {best_diff}")
+print(f"Pentagonal numbers: P={best_pair[0]}, Q={best_pair[1]}")
